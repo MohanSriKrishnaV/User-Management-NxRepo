@@ -1,4 +1,6 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 // import { UsersService } from 'users-data-access';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Store } from '@ngrx/store';
@@ -7,15 +9,16 @@ import {
   selectAllUsers,
   selectUsersLoading,
   selectUsersError,
-  User,addUser
+  User, addUser,
 } from 'users-data-access';
+import { logout } from 'data-access';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 
 @Component({
   selector: 'lib-feature-user-list',
-  imports: [AsyncPipe,JsonPipe,ReactiveFormsModule],
+  imports: [AsyncPipe, JsonPipe, ReactiveFormsModule, RouterLink],
   templateUrl: './feature-user-list.html',
   styleUrl: './feature-user-list.scss',
 })
@@ -25,6 +28,7 @@ export class FeatureUserList {
   // readonly users$ = this.usersService.getUsers();
 
    private readonly store = inject(Store);
+  private readonly router = inject(Router);
 
   readonly users$ = this.store.select(selectAllUsers);
   readonly loading$ = this.store.select(selectUsersLoading);
@@ -53,5 +57,10 @@ private readonly formBuilder = inject(FormBuilder);
      this.store.dispatch(addUser({ user }));
 
     this.userForm.reset();
+  }
+
+  logout(): void {
+    this.store.dispatch(logout());
+    this.router.navigate(['/login']);
   }
 }

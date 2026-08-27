@@ -10,6 +10,7 @@ import {
   usersFeature,
   UsersEffects,
 } from 'users-data-access';
+import { authFeature, AuthEffects } from 'data-access';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,9 +22,10 @@ export const appConfig: ApplicationConfig = {
       provide: API_URL,
       useValue: environment.apiUrl,
     },
-     provideStore(),
-  provideState(usersFeature),
-  provideEffects(UsersEffects),
+    provideStore(),
+    provideState(usersFeature),
+    provideState(authFeature),
+    provideEffects(UsersEffects, AuthEffects),
     
   ]
 };
