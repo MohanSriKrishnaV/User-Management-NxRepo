@@ -4,6 +4,12 @@ import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { API_URL } from 'users-data-access';
 import { environment } from './environments/environments';
+import { provideEffects } from '@ngrx/effects';
+import { provideState, provideStore } from '@ngrx/store';
+import {
+  usersFeature,
+  UsersEffects,
+} from 'users-data-access';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,5 +21,9 @@ export const appConfig: ApplicationConfig = {
       provide: API_URL,
       useValue: environment.apiUrl,
     },
+     provideStore(),
+  provideState(usersFeature),
+  provideEffects(UsersEffects),
+    
   ]
 };

@@ -1,14 +1,50 @@
+<div>
+  <form [formGroup]="userForm" (ngSubmit)="submit()">
+  <label>
+    Name
+    <input type="text" formControlName="name" />
+  </label>
+
+  <label>
+    Email
+    <input type="email" formControlName="email" />
+  </label>
+
+  <label>
+    Job role
+    <select formControlName="jobRole">
+      <option value="tech">Tech</option>
+      <option value="qa">QA</option>
+      <option value="id">Instructional Designer</option>
+      <option value="gd">Graphic Designer</option>
+    </select>
+  </label>
+
+  <button type="submit">Save</button>
+</form>
+</div>
+
+<div>
+
+  
 <h2>Users</h2>
 
-@if (users$ | async; as users) {
-  @for (user of users; track user.id) {
-    <div>
-      <strong>{{ user.name }}</strong>
-      <span>{{ user.email }}</span>
-    </div>
-  } @empty {
-    <p>No users found.</p>
-  }
-} @else {
+@if (loading$ | async) {
   <p>Loading users...</p>
+} @else if (error$ | async; as error) {
+  <p role="alert">{{ error }}</p>
+} @else {
+  @if (users$ | async; as users) {
+    @for (user of users; track user.email) {
+      <!-- {{user | json}} -->
+      <article>
+       <!-- <h3>{{ user.username }}</h3> -->
+        <p>{{ user.email }}</p>
+        <p>{{ user['jobRole'] }}</p>
+      </article>
+    } @empty {
+      <p>No users found.</p>
+    }
+  }
 }
+</div>
