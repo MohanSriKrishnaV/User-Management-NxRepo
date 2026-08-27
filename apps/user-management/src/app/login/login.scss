@@ -100,12 +100,24 @@ button:hover {
 }
 
 @media (max-width: 520px) {
+	.login-container {
+		place-items: start center;
+		padding: 24px 16px;
+	}
+
 	.login-form {
+		margin-top: 8vh;
 		padding: 32px 24px;
 	}
 
 	.login-accent {
 		right: -80px;
 		bottom: -40px;
+	}
+}
+
+@media (max-width: 360px) {
+	.login-form {
+		padding: 28px 18px;
 	}
 }

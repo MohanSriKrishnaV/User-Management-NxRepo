@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
+import { ToastService } from 'ui';
 
 import { UsersService } from '../services/users.service';
 import {
@@ -22,6 +23,7 @@ import {
 export class UsersEffects {
   private readonly actions$ = inject(Actions);
   private readonly usersService = inject(UsersService);
+  private readonly toast = inject(ToastService);
 
   readonly loadUsers$ = createEffect(() =>
     this.actions$.pipe(
@@ -47,13 +49,12 @@ export class UsersEffects {
     switchMap(({ user }) =>
       this.usersService.addUser(user).pipe(
         map((createdUser) => addUserSuccess({ user: createdUser })),
-        catchError((error) =>
-          of(
-            addUserFailure({
-              error: error?.message ?? 'Failed to add user',
-            }),
-          ),
-        ),
+        tap(() => this.toast.show('User created successfully.')),
+          catchError((error) => {
+            const message = error?.message ?? 'Failed to add user';
+            this.toast.show(message, 'error');
+            return of(addUserFailure({ error: message }));
+          }),
       ),
     ),
   ),
@@ -65,13 +66,12 @@ export class UsersEffects {
       switchMap(({ id }) =>
         this.usersService.deleteUser(id).pipe(
           map(() => deleteUserSuccess({ id })),
-          catchError((error) =>
-            of(
-              deleteUserFailure({
-                error: error?.message ?? 'Failed to delete user',
-              }),
-            ),
-          ),
+          tap(() => this.toast.show('User deleted successfully.')),
+          catchError((error) => {
+            const message = error?.message ?? 'Failed to delete user';
+            this.toast.show(message, 'error');
+            return of(deleteUserFailure({ error: message }));
+          }),
         ),
       ),
     ),
@@ -83,13 +83,12 @@ export class UsersEffects {
       switchMap(({ user }) =>
         this.usersService.updateUser(user).pipe(
           map((updatedUser) => updateUserSuccess({ user: updatedUser })),
-          catchError((error) =>
-            of(
-              updateUserFailure({
-                error: error?.message ?? 'Failed to update user',
-              }),
-            ),
-          ),
+          tap(() => this.toast.show('User updated successfully.')),
+          catchError((error) => {
+            const message = error?.message ?? 'Failed to update user';
+            this.toast.show(message, 'error');
+            return of(updateUserFailure({ error: message }));
+          }),
         ),
       ),
     ),

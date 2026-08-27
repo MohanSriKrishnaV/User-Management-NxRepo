@@ -137,7 +137,12 @@ article p:last-child {
 }
 
 .edit-user {
-	margin-left: auto;
+	display: grid;
+	min-height: 44px;
+	place-items: center;
+	padding: 7px 10px;
+	border: 1px solid var(--brand-green);
+	background: rgb(134 188 37 / 10%);
 	font-size: 0.85rem;
 }
 
@@ -151,6 +156,95 @@ article p:last-child {
 
 .delete-user:hover {
 	background: #fff1f0;
+}
+
+.confirm-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 900;
+	display: grid;
+	place-items: center;
+	padding: 20px;
+	background: rgb(15 20 17 / 78%);
+	backdrop-filter: blur(3px);
+}
+
+.confirm-dialog {
+	position: relative;
+	width: min(100%, 420px);
+	padding: 34px 34px 28px;
+	border: 1px solid #39413b;
+	border-top: 6px solid var(--brand-green);
+	border-radius: 8px;
+	background: var(--surface);
+	box-shadow: 0 24px 70px rgb(0 0 0 / 42%);
+}
+
+.confirm-icon {
+	display: grid;
+	width: 46px;
+	height: 46px;
+	margin-bottom: 20px;
+	place-items: center;
+	border-radius: 50%;
+	background: #fff1f0;
+	color: var(--danger);
+	font-size: 1.5rem;
+	font-weight: 900;
+}
+
+.confirm-dialog h2 {
+	margin: 0 0 10px;
+	font-size: 1.55rem;
+	line-height: 1.2;
+}
+
+.confirm-dialog > p:not(.eyebrow) {
+	margin: 0;
+	color: var(--muted);
+	line-height: 1.5;
+}
+
+.confirm-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 24px;
+	padding-top: 18px;
+	border-top: 1px solid var(--line);
+}
+
+.confirm-actions button {
+	width: auto;
+	margin: 0;
+	min-width: 112px;
+}
+
+.cancel-delete {
+	border: 1px solid var(--line);
+	background: transparent;
+	color: var(--ink);
+}
+
+.cancel-delete:hover {
+	background: var(--page);
+}
+
+.confirm-delete {
+	border: 1px solid var(--danger);
+	background: var(--danger);
+	color: white;
+}
+
+.confirm-delete:hover {
+	background: #8f1d14;
+}
+
+.user-actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-left: auto;
 }
 
 @media (max-width: 760px) {
@@ -334,6 +428,12 @@ article {
 
 	.dashboard-nav {
 		grid-template-columns: 1fr 1fr;
+		width: 100%;
+	}
+
+	.dashboard-nav a {
+		padding: 12px 10px;
+		font-size: 0.82rem;
 	}
 
 	.sidebar-logout {
@@ -347,5 +447,65 @@ article {
 
 	.dashboard-main .dashboard-content {
 		padding: 22px 20px;
+	}
+
+	.section-heading {
+		align-items: flex-start;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.users-panel,
+	.quick-add-panel {
+		padding: 22px 18px;
+	}
+
+	article {
+		align-items: flex-start;
+		flex-wrap: wrap;
+	}
+
+	.user-actions {
+		flex-basis: 100%;
+		margin-left: 46px;
+		gap: 10px;
+	}
+
+	.edit-user,
+	.delete-user {
+		flex: 1;
+		text-align: center;
+	}
+
+	.delete-user {
+		margin-left: 0;
+	}
+
+	.confirm-dialog {
+		padding: 28px 20px 22px;
+		border-radius: 6px;
+	}
+
+	.confirm-actions {
+		flex-direction: column-reverse;
+	}
+
+	.confirm-actions button {
+		width: 100%;
+	}
+}
+
+@media (max-width: 380px) {
+	.dashboard-header {
+		padding-inline: 18px;
+	}
+
+	.dashboard-header h1 {
+		font-size: 1.5rem;
+	}
+
+	.header-create {
+		width: 100%;
+		text-align: center;
 	}
 }

@@ -6,13 +6,13 @@ import {
 } from 'users-data-access';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { logout } from 'data-access';
 
 
 @Component({
   selector: 'lib-feature-user-form',
-  imports: [ReactiveFormsModule, RouterLink, RouterLinkActive],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './feature-user-form.html',
   styleUrl: './feature-user-form.scss',
 })
@@ -26,7 +26,7 @@ export class FeatureUserForm {
 private readonly formBuilder = inject(FormBuilder); 
 
  readonly userForm = this.formBuilder.nonNullable.group({
-    name: ['', Validators.required],
+    username: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     jobRole: ['tech' as User['jobRole'], Validators.required],
   });

@@ -1,52 +1,46 @@
 {
   "users": [
     {
-      "username": "updateduser",
-      "email": "updated@example.com",
-      "jobRole": "gd",
-      "id": 1
-    },
-    {
-      "id": 2,
-      "username": "superAdmin",
-      "email": "superadmin@example.com",
-      "jobRole": "super_admin"
-    },
-    {
-      "username": "testuser",
-      "email": "test@example.com",
-      "jobRole": "id",
-      "id": 3
-    },
-    {
-      "name": "mpo",
+      "username": "mpo",
       "email": "m@gmail.com",
       "jobRole": "tech",
       "id": 4
     },
     {
-      "name": "jg",
+      "username": "jg",
       "email": "a@yahoo.in",
       "jobRole": "qa",
       "id": 5
     },
     {
-      "name": "h1",
+      "username": "h1",
       "email": "hs@orkut.com",
       "jobRole": "id",
       "id": 6
     },
     {
-      "name": "tester1",
+      "username": "tester1",
       "email": "test@yahoo.in",
       "jobRole": "gd",
       "id": 7
     },
     {
-      "name": "finals",
+      "username": "finale",
       "email": "final@gmail.com",
       "jobRole": "gd",
       "id": 8
+    },
+    {
+      "username": "a",
+      "email": "a@gmail.com",
+      "jobRole": "tech",
+      "id": 9
+    },
+    {
+      "username": "d",
+      "email": "d@gmail.com",
+      "jobRole": "tech",
+      "id": 10
     }
   ]
 }

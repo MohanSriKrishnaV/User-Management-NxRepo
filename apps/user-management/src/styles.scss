@@ -24,10 +24,16 @@ body {
 
 body {
 	background: var(--page);
+	overflow-x: hidden;
 }
 
 button,
 input,
 select {
 	font: inherit;
+}
+
+button,
+a {
+	min-height: 44px;
 }

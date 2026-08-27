@@ -2,16 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_URL } from '../api-url.token';
+import { User } from '../models/user.model';
 
-export interface User {
-  id?: number;
-  name: string;
-  email: string;
-  // username:string;
-  jobRole:'tech' | 'id' | 'gd' | 'qa';
-    // 'job-role': 'tech' | 'id' | 'gd' | 'qa';
-
-}
+export type { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',

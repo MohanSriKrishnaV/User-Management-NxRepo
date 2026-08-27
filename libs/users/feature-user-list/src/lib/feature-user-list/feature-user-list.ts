@@ -1,25 +1,23 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 // import { UsersService } from 'users-data-access';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Store } from '@ngrx/store';
 import {
   loadUsers,
   selectAllUsers,
   selectUsersLoading,
   selectUsersError,
-  User, addUser,
   deleteUser,
 } from 'users-data-access';
 import { logout } from 'data-access';
 
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 
 @Component({
   selector: 'lib-feature-user-list',
-  imports: [AsyncPipe, JsonPipe, ReactiveFormsModule, RouterLink, RouterLinkActive],
+  imports: [AsyncPipe, RouterLink, RouterLinkActive],
   templateUrl: './feature-user-list.html',
   styleUrl: './feature-user-list.scss',
 })
@@ -34,30 +32,10 @@ export class FeatureUserList {
   readonly users$ = this.store.select(selectAllUsers);
   readonly loading$ = this.store.select(selectUsersLoading);
   readonly error$ = this.store.select(selectUsersError);
-
-private readonly formBuilder = inject(FormBuilder); 
-
- readonly userForm = this.formBuilder.nonNullable.group({
-    name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    jobRole: ['tech' as User['jobRole'], Validators.required],
-  });
+  readonly pendingDeleteUserId = signal<number | null>(null);
 
   constructor() {
     this.store.dispatch(loadUsers());
-  }
-
-    submit(): void {
-    if (this.userForm.invalid) {
-      this.userForm.markAllAsTouched();
-      return;
-    }
-
-    const user = this.userForm.getRawValue();
-    console.log(user);
-     this.store.dispatch(addUser({ user }));
-
-    this.userForm.reset();
   }
 
   logout(): void {
@@ -65,11 +43,31 @@ private readonly formBuilder = inject(FormBuilder);
     this.router.navigate(['/login']);
   }
 
-  delete(userId: number | undefined): void {
-    if (userId === undefined || !window.confirm('Delete this user?')) {
+  requestDelete(userId: number | undefined): void {
+    if (userId === undefined) {
+      return;
+    }
+
+    this.pendingDeleteUserId.set(userId);
+  }
+
+  confirmDelete(): void {
+    const userId = this.pendingDeleteUserId();
+    if (userId === null) {
       return;
     }
 
     this.store.dispatch(deleteUser({ id: userId }));
+    this.pendingDeleteUserId.set(null);
+  }
+
+  cancelDelete(): void {
+    this.pendingDeleteUserId.set(null);
+  }
+
+  onBackdropClick(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.cancelDelete();
+    }
   }
 }

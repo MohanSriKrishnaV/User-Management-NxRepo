@@ -41,11 +41,11 @@
     <section class="user-form-panel">
       <form [formGroup]="userForm" (ngSubmit)="submit()">
         <label>
-          Name <span class="required-mark" aria-hidden="true">*</span>
-          <input type="text" formControlName="name" required aria-required="true" />
+          Username <span class="required-mark" aria-hidden="true">*</span>
+          <input type="text" formControlName="username" required aria-required="true" />
         </label>
-        @if (userForm.controls.name.invalid && userForm.controls.name.touched) {
-          <small class="field-error" role="alert">Name is required.</small>
+        @if (userForm.controls.username.invalid && userForm.controls.username.touched) {
+          <small class="field-error" role="alert">Username is required.</small>
         }
 
         <label>

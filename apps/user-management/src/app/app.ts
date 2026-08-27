@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FeatureUserList } from 'feature-user-list';
+import { Toast } from 'ui';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,FeatureUserList],
+  imports: [RouterOutlet, FeatureUserList, Toast],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

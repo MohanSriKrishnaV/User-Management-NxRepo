@@ -50,14 +50,16 @@
               <article>
                 <span class="user-icon small" aria-hidden="true">{{ user.email.charAt(0).toUpperCase() }}</span>
                 <div>
-                  <p>{{ user.email }}</p>
-                  <p>{{ user['jobRole'] }}</p>
+                  <p>{{ user.username }}</p>
+                  <p>{{ user.email }} · {{ user.jobRole }}</p>
                 </div>
                 @if (user.id !== undefined) {
-                  <a class="edit-user" [routerLink]="['/edit-users', user.id]">Edit</a>
-                  <button class="delete-user" type="button" (click)="delete(user.id)">
-                    Delete
-                  </button>
+                  <div class="user-actions">
+                    <a class="edit-user" [routerLink]="['/edit-users', user.id]">Edit</a>
+                    <button class="delete-user" type="button" (click)="requestDelete(user.id)">
+                      Delete
+                    </button>
+                  </div>
                 }
               </article>
             } @empty {
@@ -69,3 +71,23 @@
     </div>
   </main>
 </div>
+
+@if (pendingDeleteUserId() !== null) {
+  <div class="confirm-backdrop" role="presentation" (click)="onBackdropClick($event)">
+    <section
+      class="confirm-dialog"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="delete-title"
+    >
+      <span class="confirm-icon" aria-hidden="true">!</span>
+      <p class="eyebrow">Confirm action</p>
+      <h2 id="delete-title">Delete this user?</h2>
+      <p>This user will be permanently removed from the directory.</p>
+      <div class="confirm-actions">
+        <button type="button" class="cancel-delete" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="confirm-delete" (click)="confirmDelete()">Delete user</button>
+      </div>
+    </section>
+  </div>
+}

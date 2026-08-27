@@ -231,3 +231,22 @@ button:hover {
 		margin-top: 0;
 	}
 }
+
+@media (max-width: 380px) {
+	.user-form-page {
+		padding: 28px 16px;
+	}
+
+	.user-form-panel {
+		padding: 22px 18px;
+	}
+
+	h1 {
+		font-size: 1.85rem;
+	}
+
+	.form-header a {
+		width: 100%;
+		text-align: center;
+	}
+}
