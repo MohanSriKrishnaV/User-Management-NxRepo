@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "username": "updateduser",
+      "email": "updated@example.com",
+      "jobRole": "gd",
+      "id": 1
+    },
+    {
+      "id": 2,
+      "username": "superAdmin",
+      "email": "superadmin@example.com",
+      "jobRole": "super_admin"
+    },
+    {
+      "username": "testuser",
+      "email": "test@example.com",
+      "jobRole": "id",
+      "id": 3
+    }
+  ]
+}
