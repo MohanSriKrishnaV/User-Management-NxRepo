@@ -12,7 +12,14 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-    "paths": {},
+    "paths": {
+      "data-access": ["./libs/auth/data-access/src/index.ts"],
+      "feature-login": ["./libs/auth/feature-login/src/index.ts"],
+      "feature-user-list": ["./libs/users/feature-user-list/src/index.ts"],
+      "feature-user-form": ["./libs/users/feature-user-form/src/index.ts"],
+      "ui": ["./libs/shared/ui/src/index.ts"],
+      "users-data-access": ["./libs/users/data-access/src/index.ts"]
+    },
     "rootDir": "."
   },
   "angularCompilerOptions": {
@@ -31,8 +38,5 @@
       "path": "./projects/user-management/tsconfig.spec.json"
     }
   ],
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }
