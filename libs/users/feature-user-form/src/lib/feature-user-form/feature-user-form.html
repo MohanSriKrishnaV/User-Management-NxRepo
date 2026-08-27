@@ -1,1 +1,62 @@
-<p>FeatureUserForm works!</p>
+<div class="dashboard-shell">
+  <aside class="dashboard-sidebar" aria-label="Dashboard navigation">
+    <div class="brand-lockup">
+      <span class="brand-mark" aria-hidden="true">D</span>
+      <span>Deloitte Workspace</span>
+    </div>
+
+    <div class="account-card">
+      <span class="user-icon" aria-hidden="true">A</span>
+      <div>
+        <strong>Admin user</strong>
+        <span>Administrator</span>
+      </div>
+    </div>
+
+    <nav class="dashboard-nav" aria-label="Primary">
+      <a routerLink="/users">User directory</a>
+      <a class="active" routerLink="/post-users">Add user</a>
+    </nav>
+
+    <button class="sidebar-logout" type="button" (click)="logout()">
+      <span aria-hidden="true">&#8594;</span>
+      Logout
+    </button>
+  </aside>
+
+  <main class="user-form-page">
+    <header class="form-header">
+      <div>
+        <p class="eyebrow">User Management</p>
+        <h1>Create user</h1>
+      </div>
+      <a routerLink="/users">Back to users</a>
+    </header>
+
+    <section class="user-form-panel">
+      <form [formGroup]="userForm" (ngSubmit)="submit()">
+        <label>
+          Name
+          <input type="text" formControlName="name" />
+        </label>
+
+        <label>
+          Email
+          <input type="email" formControlName="email" />
+        </label>
+
+        <label>
+          Job role
+          <select formControlName="jobRole">
+            <option value="tech">Tech</option>
+            <option value="qa">QA</option>
+            <option value="id">Instructional Designer</option>
+            <option value="gd">Graphic Designer</option>
+          </select>
+        </label>
+
+        <button type="submit">Save user</button>
+      </form>
+    </section>
+  </main>
+</div>

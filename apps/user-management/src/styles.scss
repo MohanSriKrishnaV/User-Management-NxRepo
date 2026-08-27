@@ -1,1 +1,33 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+	--brand-green: #86bc25;
+	--brand-green-dark: #5f8d16;
+	--ink: #202020;
+	--muted: #687078;
+	--surface: #ffffff;
+	--page: #f3f5f4;
+	--line: #d9dfdc;
+	--danger: #b42318;
+	font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+	color: var(--ink);
+	background: var(--page);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	min-height: 100%;
+	margin: 0;
+}
+
+body {
+	background: var(--page);
+}
+
+button,
+input,
+select {
+	font: inherit;
+}
