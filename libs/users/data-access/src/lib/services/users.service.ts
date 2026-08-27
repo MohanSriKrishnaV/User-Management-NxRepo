@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { API_URL } from '../api-url.token';
 
 export interface User {
-  // id: number;
+  id?: number;
   name: string;
   email: string;
   // username:string;
@@ -32,10 +32,10 @@ export class UsersService {
   }
 
     updateUser(user: User) {
-    return this.http.put<User>(`${this.apiUrl}/${user.email}`, user);
+    return this.http.put<User>(`${this.apiUrl}/users/${user.id}`, user);
   }
 
   deleteUser(id: number) {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}`);
   }
 }

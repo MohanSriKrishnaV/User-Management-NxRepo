@@ -2,7 +2,8 @@ import { createFeature, createReducer, on } from '@ngrx/store';
 import {
   loadUsers,
   loadUsersFailure,
-  loadUsersSuccess,addUserSuccess
+  loadUsersSuccess, addUserSuccess,
+  deleteUserSuccess, updateUserSuccess,
 } from './users.actions';
 import { User } from '../services/users.service';
 
@@ -47,6 +48,18 @@ export const usersFeature = createFeature({
   ...state,
   users: [...state.users, user],
 })),
+
+      on(deleteUserSuccess, (state, { id }) => ({
+        ...state,
+        users: state.users.filter((user) => user.id !== id),
+      })),
+
+    on(updateUserSuccess, (state, { user }) => ({
+      ...state,
+      users: state.users.map((currentUser) =>
+        currentUser.id === user.id ? user : currentUser,
+      ),
+    })),
   ),
 });
 

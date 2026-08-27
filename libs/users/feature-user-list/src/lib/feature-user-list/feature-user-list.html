@@ -1,9 +1,5 @@
 <div class="dashboard-shell">
   <aside class="dashboard-sidebar" aria-label="Dashboard navigation">
-    <!-- <div class="brand-lockup">
-      <span class="brand-mark" aria-hidden="true">D</span>
-      <span>Deloitte Workspace</span>
-    </div> -->
 
     <div class="account-card">
       <span class="user-icon" aria-hidden="true">A</span>
@@ -14,8 +10,10 @@
     </div>
 
     <nav class="dashboard-nav" aria-label="Primary">
-      <a class="active" routerLink="/users">User directory</a>
-      <a routerLink="/post-users">Add user</a>
+      <a routerLink="/users" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        User directory
+      </a>
+      <a routerLink="/post-users" routerLinkActive="active">Add user</a>
     </nav>
 
     <button class="sidebar-logout" type="button" (click)="logout()">
@@ -34,41 +32,12 @@
     </header>
 
     <div class="dashboard-content">
-      <section class="quick-add-panel">
-        <p class="eyebrow">Quick action</p>
-        <h2>Add a user</h2>
-        <form [formGroup]="userForm" (ngSubmit)="submit()">
-          <label>
-            Name
-            <input type="text" formControlName="name" />
-          </label>
-
-          <label>
-            Email
-            <input type="email" formControlName="email" />
-          </label>
-
-          <label>
-            Job role
-            <select formControlName="jobRole">
-              <option value="tech">Tech</option>
-              <option value="qa">QA</option>
-              <option value="id">Instructional Designer</option>
-              <option value="gd">Graphic Designer</option>
-            </select>
-          </label>
-
-          <button type="submit">Save user</button>
-        </form>
-      </section>
-
       <section class="users-panel">
         <div class="section-heading">
           <div>
             <p class="eyebrow">Directory</p>
             <h2>Users</h2>
           </div>
-          <span class="record-label">Live records</span>
         </div>
 
         @if (loading$ | async) {
@@ -84,6 +53,12 @@
                   <p>{{ user.email }}</p>
                   <p>{{ user['jobRole'] }}</p>
                 </div>
+                @if (user.id !== undefined) {
+                  <a class="edit-user" [routerLink]="['/edit-users', user.id]">Edit</a>
+                  <button class="delete-user" type="button" (click)="delete(user.id)">
+                    Delete
+                  </button>
+                }
               </article>
             } @empty {
               <p>No users found.</p>

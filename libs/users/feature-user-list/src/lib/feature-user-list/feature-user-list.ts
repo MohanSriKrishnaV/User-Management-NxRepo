@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 // import { UsersService } from 'users-data-access';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Store } from '@ngrx/store';
@@ -10,6 +10,7 @@ import {
   selectUsersLoading,
   selectUsersError,
   User, addUser,
+  deleteUser,
 } from 'users-data-access';
 import { logout } from 'data-access';
 
@@ -18,7 +19,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'lib-feature-user-list',
-  imports: [AsyncPipe, JsonPipe, ReactiveFormsModule, RouterLink],
+  imports: [AsyncPipe, JsonPipe, ReactiveFormsModule, RouterLink, RouterLinkActive],
   templateUrl: './feature-user-list.html',
   styleUrl: './feature-user-list.scss',
 })
@@ -62,5 +63,13 @@ private readonly formBuilder = inject(FormBuilder);
   logout(): void {
     this.store.dispatch(logout());
     this.router.navigate(['/login']);
+  }
+
+  delete(userId: number | undefined): void {
+    if (userId === undefined || !window.confirm('Delete this user?')) {
+      return;
+    }
+
+    this.store.dispatch(deleteUser({ id: userId }));
   }
 }

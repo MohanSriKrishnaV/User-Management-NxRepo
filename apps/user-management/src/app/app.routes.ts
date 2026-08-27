@@ -25,6 +25,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'edit-users/:id',
+    component: FeatureUserForm,
+    canActivate: [authGuard],
+  },
+  {
     path: '**',
     redirectTo: 'login',
   },

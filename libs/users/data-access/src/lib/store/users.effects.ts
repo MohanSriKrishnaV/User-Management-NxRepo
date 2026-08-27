@@ -9,7 +9,13 @@ import {
   loadUsersSuccess,
   addUser,
   addUserSuccess,
-  addUserFailure
+  addUserFailure,
+  deleteUser,
+  deleteUserSuccess,
+  deleteUserFailure,
+  updateUser,
+  updateUserSuccess,
+  updateUserFailure,
 } from './users.actions';
 
 @Injectable()
@@ -52,4 +58,40 @@ export class UsersEffects {
     ),
   ),
 );
+
+  readonly deleteUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(deleteUser),
+      switchMap(({ id }) =>
+        this.usersService.deleteUser(id).pipe(
+          map(() => deleteUserSuccess({ id })),
+          catchError((error) =>
+            of(
+              deleteUserFailure({
+                error: error?.message ?? 'Failed to delete user',
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  readonly updateUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateUser),
+      switchMap(({ user }) =>
+        this.usersService.updateUser(user).pipe(
+          map((updatedUser) => updateUserSuccess({ user: updatedUser })),
+          catchError((error) =>
+            of(
+              updateUserFailure({
+                error: error?.message ?? 'Failed to update user',
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }
