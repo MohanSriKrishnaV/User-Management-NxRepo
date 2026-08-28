@@ -18,19 +18,19 @@ A small user management application built with Angular, NgRx, Nx, and `json-serv
 
 | Desktop                         | Mobile                                           |
 | ------------------------------- | ------------------------------------------------ |
-| ![Login page](extras/login.png) | ![Login page on mobile](extras/login-mobile.png) |
+| ![Login page](./extras/login.png) | ![Login page on mobile](./extras/login-mobile.png) |
 
 ### User directory
 
 | Desktop                                  | Mobile                                               |
 | ---------------------------------------- | ---------------------------------------------------- |
-| ![User directory](extras/users-list.png) | ![User directory on mobile](extras/users-mobile.png) |
+| ![User directory](./extras/users-list.png) | ![User directory on mobile](./extras/users-mobile.png) |
 
 ### Create user
 
 | Desktop                                     | Mobile                                                       |
 | ------------------------------------------- | ------------------------------------------------------------ |
-| ![Create user form](extras/create-user.png) | ![Create user form on mobile](extras/create-user-mobile.png) |
+| ![Create user form](./extras/create-user.png) | ![Create user form on mobile](./extras/create-user-mobile.png) |
 
 ## Technology
 
