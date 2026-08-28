@@ -1,186 +1,126 @@
 # User Management
 
-An Angular and NgRx user management application built in an Nx monorepo. The application provides mocked authentication, a responsive user dashboard, and CRUD operations backed by `json-server`.
+A small user management application built with Angular, NgRx, Nx, and `json-server`. It provides a mocked login flow, a protected user directory, and full create, read, update, and delete workflows.
 
 ## Features
 
-- Mock login with required username and password fields.
-- Protected user-management routes using an NgRx-backed auth guard.
-- User directory loaded from a local REST API.
-- Create users with required `username`, `email`, and `jobRole` fields.
-- Edit existing users through the same reusable form.
-- Delete users through the NgRx store with an in-app confirmation dialog.
-- Toast notifications for successful and failed API operations.
-- Responsive dashboard layout with a sidebar, user identity panel, navigation, and logout.
-- Deloitte-inspired green, charcoal, white, and neutral gray visual theme.
+- Mock authentication with protected routes and logout.
+- User directory loaded from a REST-style `json-server` API.
+- Add, edit, and delete users through a shared reactive form and NgRx state.
+- Loading states, save states, confirmation dialog, and success/error notifications.
+- Responsive desktop and mobile layouts.
+- Accessible labels, validation feedback, live status messages, keyboard-friendly controls, and dialog semantics.
+- Unit coverage for services, reducers, effects, forms, login, and route protection.
 
-## Technology Stack
+## Screenshots
 
-- Angular 20
-- TypeScript
+### Login
+
+| Desktop                         | Mobile                                           |
+| ------------------------------- | ------------------------------------------------ |
+| ![Login page](extras/login.png) | ![Login page on mobile](extras/login-mobile.png) |
+
+### User directory
+
+| Desktop                                  | Mobile                                               |
+| ---------------------------------------- | ---------------------------------------------------- |
+| ![User directory](extras/users-list.png) | ![User directory on mobile](extras/users-mobile.png) |
+
+### Create user
+
+| Desktop                                     | Mobile                                                       |
+| ------------------------------------------- | ------------------------------------------------------------ |
+| ![Create user form](extras/create-user.png) | ![Create user form on mobile](extras/create-user-mobile.png) |
+
+## Technology
+
+- Angular 20 and TypeScript
 - NgRx Store and Effects
-- Nx 23
+- Nx 23 monorepo
 - RxJS
-- `json-server` for the mocked backend
-- SCSS for component and responsive styling
-- Karma/Jasmine for Angular application tests
-- Jest for Nx library tests
+- `json-server`
+- SCSS
+- Jest for library tests and Karma/Jasmine for application tests
 
-## Requirements
+## Setup
 
-Install the following before starting:
-
-- Node.js 18 or newer
-- npm
-
-Confirm the installed versions:
-
-```bash
-node --version
-npm --version
-```
-
-## Installation
-
-Install dependencies from the repository root:
+Requirements: Node.js 18 or newer and npm.
 
 ```bash
 npm install
 ```
 
-## Running the Application
+## Run the application
 
-The application has two processes:
-
-1. Angular development server on port `4200`.
-2. JSON Server mock API on port `3000`.
-
-The easiest option is to start both together:
-
-```bash
-npm run start:all
-```
-
-Open the application at:
-
-```text
-http://localhost:4200
-```
-
-To run each process separately:
-
-```bash
-npm run api
-```
-
-In another terminal:
+Start the Angular application and mock API together with one command:
 
 ```bash
 npm start
 ```
 
-The Angular server uses the development configuration and automatically rebuilds when source files change.
+Open [http://localhost:4200](http://localhost:4200).
 
-## Mock API
+The individual processes can also be started separately:
 
-The mock database is stored in `db/db.json`. JSON Server exposes the following resource:
-
-```text
-GET    http://localhost:3000/users
-POST   http://localhost:3000/users
-PUT    http://localhost:3000/users/:id
-DELETE http://localhost:3000/users/:id
+```bash
+npm run api
+npx nx serve user-management
 ```
 
-The application uses `UsersService` for HTTP access. Components do not call `HttpClient` directly. User effects listen for store actions, call the service, and dispatch success or failure actions.
-
-The application API base URL is configured in:
-
-```text
-apps/user-management/src/app/environments/environments.ts
-```
-
-For the local JSON Server setup it is:
-
-```ts
-apiUrl: 'http://localhost:3000'
-```
+The Angular development server runs on port `4200`. JSON Server runs on port `3000`.
 
 ## Authentication
 
-Authentication is intentionally mocked because the assessment does not require a real authentication backend.
-
-Use these credentials:
+Authentication is intentionally mocked for this assessment.
 
 ```text
 Username: admin
 Password: admin
 ```
 
-The login flow is implemented in `libs/auth/data-access`:
+Successful login stores the session flag in `localStorage` and redirects to `/users`. Unauthenticated users are redirected to `/login` by the route guard.
 
-1. The login form validates that both fields are present.
-2. The form dispatches the `[Auth] Login` action.
-3. `AuthEffects` validates the mock credentials.
-4. A successful login stores `isLoggedIn=true` in `localStorage`.
-5. The auth reducer exposes `selectIsAuthenticated`.
-6. The route guard redirects unauthenticated users to `/login`.
-7. Logout clears the store state and local storage, then redirects to `/login`.
+## API
 
-This is not production authentication. A real application should validate credentials on a server and use secure session or token handling.
+The mock database is `db/db.json`. The API base URL is configured in `apps/user-management/src/app/environments/environments.ts`.
 
-## Application Routes
+| Method | Endpoint     | Purpose       |
+| ------ | ------------ | ------------- |
+| GET    | `/users`     | Load users    |
+| POST   | `/users`     | Create a user |
+| PUT    | `/users/:id` | Update a user |
+| DELETE | `/users/:id` | Delete a user |
 
-| Route | Purpose | Protected |
-| --- | --- | --- |
-| `/login` | Mock login page | No |
-| `/users` | User directory dashboard | Yes |
-| `/post-users` | Create user form | Yes |
-| `/edit-users/:id` | Edit user form | Yes |
+The application uses `UsersService` for HTTP calls. NgRx effects coordinate requests and dispatch success or failure actions. Components do not call `HttpClient` directly.
 
-Unknown routes redirect to `/login`.
+## Routes
 
-## NgRx Architecture
+| Route             | Purpose        | Protected |
+| ----------------- | -------------- | --------- |
+| `/login`          | Sign in        | No        |
+| `/users`          | User directory | Yes       |
+| `/post-users`     | Create user    | Yes       |
+| `/edit-users/:id` | Edit user      | Yes       |
 
-### Auth data-access library
+## Architecture
 
-Located in `libs/auth/data-access`.
+```text
+apps/user-management
+  app.config.ts       Application providers and NgRx registration
+  app.routes.ts       Routing and auth guard integration
+  login/              Login screen
 
-- `auth.actions.ts`: login, login success, login failure, and logout actions.
-- `auth.reducer.ts`: authenticated state and authentication errors.
-- `auth.effects.ts`: mock credential validation and local storage persistence.
-- `src/index.ts`: public library exports used by the application.
+libs/auth/data-access         Auth actions, reducer, effects, selectors
+libs/auth/feature-login       Auth feature library
+libs/users/data-access        User model, HTTP service, store, effects
+libs/users/feature-user-list  Dashboard and user directory
+libs/users/feature-user-form  Create/edit form
+libs/shared/ui                Toast and loading indicator components
 
-### Users data-access library
-
-Located in `libs/users/data-access`.
-
-- `models/user.model.ts`: shared user contract.
-- `services/users.service.ts`: HTTP client for JSON Server.
-- `store/users.actions.ts`: load, add, update, and delete actions.
-- `store/users.reducer.ts`: user collection, loading state, and errors.
-- `store/users.effects.ts`: API calls and success/error toast notifications.
-- `src/index.ts`: public library exports.
-
-The shared user shape is:
-
-```ts
-interface User {
-	id?: number;
-	username: string;
-	email: string;
-	jobRole: 'tech' | 'id' | 'gd' | 'qa';
-}
+db/db.json                    JSON Server data source
 ```
 
-### Feature libraries
-
-- `libs/users/feature-user-list`: dashboard, user directory, edit/delete actions, sidebar, and delete confirmation dialog.
-- `libs/users/feature-user-form`: create/edit form with shared validation and navigation.
-- `libs/auth/feature-login`: reserved auth feature library structure.
-- `libs/shared/ui`: reusable toast component and toast service.
-
-The root application registers the feature states and effects in `app.config.ts`:
+The application registers the feature state and effects at bootstrap:
 
 ```ts
 provideStore();
@@ -189,67 +129,50 @@ provideState(authFeature);
 provideEffects(UsersEffects, AuthEffects);
 ```
 
-## User Workflows
+The shared user contract is:
 
-### Create
-
-1. Sign in with the mock credentials.
-2. Open **Add user** from the sidebar or dashboard header.
-3. Enter a username, valid email, and job role.
-4. Submit the form.
-5. The form dispatches `addUser`.
-6. The effect sends `POST /users`.
-7. The reducer adds the returned user and a success toast is shown.
-8. The application returns to `/users`.
-
-### Edit
-
-1. Select **Edit** on a user row.
-2. The route includes the selected user ID.
-3. The form loads the user collection and patches the matching user into the form.
-4. Submit the updated fields.
-5. The effect sends `PUT /users/:id`.
-6. The reducer replaces the matching user and displays a success toast.
-
-### Delete
-
-1. Select **Delete** on a user row.
-2. Confirm in the custom in-app dialog.
-3. The effect sends `DELETE /users/:id`.
-4. The reducer removes the user after a successful response.
-5. A success or error toast communicates the result.
-
-## Validation and Accessibility
-
-- Reactive Forms use `Validators.required` for all mandatory fields.
-- Email fields also use `Validators.email`.
-- Native `required` and `aria-required` attributes are present on form controls.
-- Validation messages use `role="alert"`.
-- Navigation uses semantic links and `nav` landmarks.
-- The delete confirmation uses `role="alertdialog"` and `aria-modal="true"`.
-- Mobile controls use touch-friendly sizing and avoid horizontal page overflow.
-
-## Styling
-
-The visual system is defined in `apps/user-management/src/styles.scss` and reused by feature styles:
-
-- `--brand-green`: primary action and active-state color.
-- `--ink`: sidebar and high-contrast text color.
-- `--surface`: panels and form surfaces.
-- `--page`: neutral page background.
-- `--danger`: validation, deletion, and error states.
-
-The layout adapts at mobile breakpoints. On desktop, the sidebar remains anchored while the main content can scroll naturally. On small screens, the sidebar becomes a stacked navigation area and user-row actions become a full-width action strip.
-
-## Build
-
-Build the application in development mode:
-
-```bash
-npx nx build user-management --configuration development
+```ts
+interface User {
+  id?: number;
+  username: string;
+  email: string;
+  jobRole: 'tech' | 'id' | 'gd' | 'qa';
+}
 ```
 
-Build the default production configuration:
+## Validation and accessibility
+
+- Required fields use Angular reactive-form validators and native required attributes.
+- Email input uses email validation and reports an associated error message.
+- Form controls expose invalid state through `aria-invalid` and `aria-describedby`.
+- Loading and toast messages use live-region semantics.
+- Navigation uses semantic links and `nav` landmarks.
+- Delete confirmation uses `alertdialog`, `aria-modal`, labelled title, and description.
+- Controls meet touch-friendly sizing expectations and layouts avoid horizontal overflow on mobile.
+
+## Testing and build
+
+Run all library lint targets:
+
+```bash
+npm run lint
+```
+
+Run the browser-independent Jest suites:
+
+```bash
+npx nx run-many -t test --projects=data-access,users-data-access,feature-login,feature-user-form,feature-user-list --runInBand --outputStyle=static
+```
+
+Run the Angular application tests:
+
+```bash
+npx nx test user-management --watch=false
+```
+
+The application test target uses Karma and requires Chrome or Chromium. In a headless container, configure `CHROME_BIN` or install a browser before running it.
+
+Build the production application:
 
 ```bash
 npm run build
@@ -257,78 +180,11 @@ npm run build
 
 Build output is written to `dist/user-management`.
 
-## Testing
+## Design decisions
 
-Run all configured Nx tests:
-
-```bash
-npm test
-```
-
-Run the application tests directly:
-
-```bash
-npx nx test user-management --watch=false
-```
-
-Run an individual library test target:
-
-```bash
-npx nx test feature-user-list
-npx nx test feature-user-form
-npx nx test data-access
-```
-
-The Angular application test target uses Karma and expects a Chrome or Chromium binary. In a container without Chrome, the test build can complete but the browser-launch step will fail until `CHROME_BIN` is configured or Chrome is installed.
-
-Run linting across the workspace:
-
-```bash
-npm run lint
-```
-
-## Useful Nx Commands
-
-```bash
-npx nx graph
-npx nx show project user-management
-npx nx show projects
-```
-
-`nx graph` is useful for reviewing the dependency relationships between the application and libraries.
-
-## Project Structure
-
-```text
-apps/
-	user-management/
-		src/app/
-			auth/                 # Route guard
-			environments/         # API environment values
-			login/                # Login page
-			app.config.ts         # Providers and NgRx registration
-			app.routes.ts         # Application routes
-
-libs/
-	auth/
-		data-access/            # Auth actions, reducer, effects
-		feature-login/          # Auth feature library
-	shared/
-		ui/                     # Shared toast component/service
-	users/
-		data-access/            # User model, service, store, effects
-		feature-user-form/      # Create/edit form
-		feature-user-list/      # Dashboard and user directory
-
-db/
-	db.json                   # JSON Server database
-```
-
-## Design Decisions
-
-- Authentication and user state are managed through NgRx to keep state transitions explicit and testable.
-- HTTP responsibilities remain in data-access services, while effects coordinate asynchronous API operations.
-- The create and edit flows reuse one form component to avoid duplicated validation and UI behavior.
-- The mock API is intentionally local and replaceable through the environment API URL.
-- Toast notifications are provided by the shared UI library so API feedback is consistent across features.
-- The UI uses a responsive dashboard layout rather than nested list scrolling, allowing the page to grow naturally as users are added.
+- NgRx owns authentication and user state so asynchronous workflows remain explicit and testable.
+- HTTP access is isolated in `UsersService`; effects handle API orchestration and user feedback.
+- One form component supports both create and edit flows to keep validation and interaction consistent.
+- Add and edit navigation occurs only after the API reports success; pending saves disable duplicate submission.
+- The API base URL is environment-configurable, keeping the local mock backend replaceable.
+- Shared UI components centralize toast notifications and loading feedback.
