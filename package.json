@@ -4,9 +4,9 @@
   "scripts": {
     "ng": "ng",
     "watch": "nx build --watch --configuration development",
-    "start": "nx serve user-management",
+    "start": "concurrently \"npm run api\" \"nx serve user-management\"",
     "api": "json-server --watch db/db.json --port 3000",
-    "start:all": "concurrently \"npm run api\" \"npm run start\"",
+    "start:all": "npm start",
     "build": "nx build user-management",
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
