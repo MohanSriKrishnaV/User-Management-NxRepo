@@ -1,18 +1,19 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import {
   User, addUser, loadUsers, selectAllUsers, updateUser,
+  selectUsersSaving, selectUsersSaveSucceeded,
 } from 'users-data-access';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { logout } from 'data-access';
 
 
 @Component({
   selector: 'lib-feature-user-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink,RouterLinkActive],
   templateUrl: './feature-user-form.html',
   styleUrl: './feature-user-form.scss',
 })
@@ -33,9 +34,19 @@ private readonly formBuilder = inject(FormBuilder);
 
   readonly isEditMode = this.route.snapshot.paramMap.has('id');
   private readonly users = this.store.selectSignal(selectAllUsers);
+  readonly saving = this.store.selectSignal(selectUsersSaving);
+  private readonly saveSucceeded = this.store.selectSignal(selectUsersSaveSucceeded);
+  private readonly saveSubmitted = signal(false);
   private readonly editUserId = Number(this.route.snapshot.paramMap.get('id'));
 
   constructor() {
+    effect(() => {
+      if (this.saveSubmitted() && this.saveSucceeded()) {
+        this.userForm.reset();
+        this.router.navigate(['/users']);
+      }
+    });
+
     if (this.isEditMode) {
       this.store.dispatch(loadUsers());
       effect(() => {
@@ -56,14 +67,13 @@ private readonly formBuilder = inject(FormBuilder);
     }
 
     const user = this.userForm.getRawValue();
+    this.saveSubmitted.set(true);
     if (this.isEditMode) {
       this.store.dispatch(updateUser({ user: { ...user, id: this.editUserId } }));
     } else {
       this.store.dispatch(addUser({ user }));
     }
 
-    this.userForm.reset();
-    this.router.navigate(['/users']);
   }
 
   logout(): void {

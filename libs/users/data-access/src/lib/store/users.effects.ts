@@ -19,6 +19,19 @@ import {
   updateUserFailure,
 } from './users.actions';
 
+function getUserErrorMessage(error: unknown, operation: string): string {
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'status' in error &&
+    error.status === 0
+  ) {
+    return `Unable to ${operation} users. Please check that the API is running and try again.`;
+  }
+
+  return `Unable to ${operation} users. Please try again.`;
+}
+
 @Injectable()
 export class UsersEffects {
   private readonly actions$ = inject(Actions);
@@ -34,7 +47,7 @@ export class UsersEffects {
           catchError((error) =>
             of(
               loadUsersFailure({
-                error: error?.message ?? 'Failed to load users',
+                error: getUserErrorMessage(error, 'load'),
               }),
             ),
           ),
@@ -51,7 +64,7 @@ export class UsersEffects {
         map((createdUser) => addUserSuccess({ user: createdUser })),
         tap(() => this.toast.show('User created successfully.')),
           catchError((error) => {
-            const message = error?.message ?? 'Failed to add user';
+            const message = getUserErrorMessage(error, 'add');
             this.toast.show(message, 'error');
             return of(addUserFailure({ error: message }));
           }),
@@ -68,7 +81,7 @@ export class UsersEffects {
           map(() => deleteUserSuccess({ id })),
           tap(() => this.toast.show('User deleted successfully.')),
           catchError((error) => {
-            const message = error?.message ?? 'Failed to delete user';
+            const message = getUserErrorMessage(error, 'delete');
             this.toast.show(message, 'error');
             return of(deleteUserFailure({ error: message }));
           }),
@@ -85,7 +98,7 @@ export class UsersEffects {
           map((updatedUser) => updateUserSuccess({ user: updatedUser })),
           tap(() => this.toast.show('User updated successfully.')),
           catchError((error) => {
-            const message = error?.message ?? 'Failed to update user';
+            const message = getUserErrorMessage(error, 'update');
             this.toast.show(message, 'error');
             return of(updateUserFailure({ error: message }));
           }),

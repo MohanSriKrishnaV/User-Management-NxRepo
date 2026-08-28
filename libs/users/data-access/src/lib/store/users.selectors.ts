@@ -1,6 +1,8 @@
 export {
   selectAllUsers,
   selectUsersLoading,
+  selectUsersSaving,
+  selectUsersSaveSucceeded,
   selectUsersError,
   selectUsersState,
   

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_URL } from '../api-url.token';
 import { User } from '../models/user.model';
@@ -11,10 +11,7 @@ export type { User } from '../models/user.model';
 })
 export class UsersService {
   private readonly http = inject(HttpClient);
-
-  constructor(
-    @Inject(API_URL) private apiUrl: string,
-  ) {}
+  private readonly apiUrl = inject(API_URL);
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/users`);

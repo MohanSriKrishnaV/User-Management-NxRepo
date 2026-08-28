@@ -1,21 +1,31 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import {
+  addUser,
+  addUserFailure,
   loadUsers,
   loadUsersFailure,
-  loadUsersSuccess, addUserSuccess,
-  deleteUserSuccess, updateUserSuccess,
+  loadUsersSuccess,
+  addUserSuccess,
+  deleteUserSuccess,
+  updateUser,
+  updateUserFailure,
+  updateUserSuccess,
 } from './users.actions';
 import { User } from '../services/users.service';
 
 export interface UsersState {
   users: User[];
   loading: boolean;
+  saving: boolean;
+  saveSucceeded: boolean;
   error: string | null;
 }
 
 const initialState: UsersState = {
   users: [],
   loading: false,
+  saving: false,
+  saveSucceeded: false,
   error: null,
 };
 
@@ -25,7 +35,6 @@ export const usersFeature = createFeature({
     initialState,
 
     on(loadUsers, (state) => ({
-      ...state,
       ...state,
       loading: true,
       error: null,
@@ -44,10 +53,26 @@ export const usersFeature = createFeature({
       error,
     })),
 
+    on(addUser, updateUser, (state) => ({
+      ...state,
+      saving: true,
+      saveSucceeded: false,
+      error: null,
+    })),
+
     on(addUserSuccess, (state, { user }) => ({
-  ...state,
-  users: [...state.users, user],
-})),
+      ...state,
+      users: [...state.users, user],
+      saving: false,
+      saveSucceeded: true,
+    })),
+
+    on(addUserFailure, updateUserFailure, (state, { error }) => ({
+      ...state,
+      saving: false,
+      saveSucceeded: false,
+      error,
+    })),
 
       on(deleteUserSuccess, (state, { id }) => ({
         ...state,
@@ -56,6 +81,8 @@ export const usersFeature = createFeature({
 
     on(updateUserSuccess, (state, { user }) => ({
       ...state,
+      saving: false,
+      saveSucceeded: true,
       users: state.users.map((currentUser) =>
         currentUser.id === user.id ? user : currentUser,
       ),
@@ -69,6 +96,8 @@ export const {
   selectUsersState,
   selectUsers,
   selectLoading: selectUsersLoading,
+  selectSaving: selectUsersSaving,
+  selectSaveSucceeded: selectUsersSaveSucceeded,
   selectError: selectUsersError,
 } = usersFeature;
 
