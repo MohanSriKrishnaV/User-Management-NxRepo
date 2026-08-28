@@ -13,13 +13,15 @@
       autocomplete="username"
       required
       aria-required="true"
+      [attr.aria-invalid]="loginForm.controls.username.invalid && loginForm.controls.username.touched"
+      [attr.aria-describedby]="loginForm.controls.username.invalid && loginForm.controls.username.touched ? 'username-error' : null"
     />
 
     @if (
       loginForm.controls.username.invalid &&
       loginForm.controls.username.touched
     ) {
-      <small role="alert">Username is required.</small>
+      <small id="username-error" role="alert">Username is required.</small>
     }
 
     <label for="password">Password</label>
@@ -30,17 +32,19 @@
       autocomplete="current-password"
       required
       aria-required="true"
+      [attr.aria-invalid]="loginForm.controls.password.invalid && loginForm.controls.password.touched"
+      [attr.aria-describedby]="loginForm.controls.password.invalid && loginForm.controls.password.touched ? 'password-error' : null"
     />
 
     @if (
       loginForm.controls.password.invalid &&
       loginForm.controls.password.touched
     ) {
-      <small role="alert">Password is required.</small>
+      <small id="password-error" role="alert">Password is required.</small>
     }
 
     @if (errorMessage(); as error) {
-      <p role="alert">{{ error }}</p>
+      <p id="login-error" role="alert">{{ error }}</p>
     }
 
     <button type="submit">Login</button>

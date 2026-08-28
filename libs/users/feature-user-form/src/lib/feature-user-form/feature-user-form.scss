@@ -218,21 +218,53 @@ button:hover {
 
 	.dashboard-sidebar {
 		position: static;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		grid-template-areas:
+			'account logout'
+			'nav nav';
 		height: auto;
 		gap: 18px;
 		padding: 18px 20px;
 	}
 
+	.account-card {
+		grid-column: 1;
+		grid-area: account;
+	}
+
 	.dashboard-nav {
+		grid-column: 1 / -1;
+		grid-area: nav;
 		grid-template-columns: 1fr 1fr;
 	}
 
 	.sidebar-logout {
+		grid-column: 2;
+		grid-area: logout;
+		align-self: center;
+		width: auto;
 		margin-top: 0;
 	}
 }
 
 @media (max-width: 380px) {
+	.dashboard-sidebar {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		grid-template-areas:
+			'account logout'
+			'nav nav';
+	}
+
+	.dashboard-nav {
+		grid-column: 1 / -1;
+	}
+
+	.sidebar-logout {
+		align-self: center;
+	}
+
 	.user-form-page {
 		padding: 28px 16px;
 	}

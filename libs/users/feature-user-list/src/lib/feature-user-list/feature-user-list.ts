@@ -1,9 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-// import { UsersService } from 'users-data-access';
 import { AsyncPipe } from '@angular/common';
 import { Store } from '@ngrx/store';
+import { LoadingIndicator } from 'ui';
 import {
   loadUsers,
   selectAllUsers,
@@ -17,16 +17,12 @@ import { logout } from 'data-access';
 
 @Component({
   selector: 'lib-feature-user-list',
-  imports: [AsyncPipe, RouterLink, RouterLinkActive],
+  imports: [AsyncPipe, RouterLink, RouterLinkActive, LoadingIndicator],
   templateUrl: './feature-user-list.html',
   styleUrl: './feature-user-list.scss',
 })
 export class FeatureUserList {
-
-  // private readonly usersService = inject(UsersService);
-  // readonly users$ = this.usersService.getUsers();
-
-   private readonly store = inject(Store);
+  private readonly store = inject(Store);
   private readonly router = inject(Router);
 
   readonly users$ = this.store.select(selectAllUsers);

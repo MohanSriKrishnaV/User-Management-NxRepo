@@ -41,7 +41,7 @@
         </div>
 
         @if (loading$ | async) {
-          <p>Loading users...</p>
+          <lib-loading-indicator label="Loading users..."></lib-loading-indicator>
         } @else if (error$ | async; as error) {
           <p role="alert">{{ error }}</p>
         } @else {
@@ -79,11 +79,12 @@
       role="alertdialog"
       aria-modal="true"
       aria-labelledby="delete-title"
+      aria-describedby="delete-description"
     >
       <span class="confirm-icon" aria-hidden="true">!</span>
       <p class="eyebrow">Confirm action</p>
       <h2 id="delete-title">Delete this user?</h2>
-      <p>This user will be permanently removed from the directory.</p>
+      <p id="delete-description">This user will be permanently removed from the directory.</p>
       <div class="confirm-actions">
         <button type="button" class="cancel-delete" (click)="cancelDelete()">Cancel</button>
         <button type="button" class="confirm-delete" (click)="confirmDelete()">Delete user</button>

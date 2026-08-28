@@ -40,27 +40,44 @@
 
     <section class="user-form-panel">
       <form [formGroup]="userForm" (ngSubmit)="submit()">
-        <label>
+        <label for="username">
           Username <span class="required-mark" aria-hidden="true">*</span>
-          <input type="text" formControlName="username" required aria-required="true" />
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            required
+            aria-required="true"
+            [attr.aria-invalid]="userForm.controls.username.invalid && userForm.controls.username.touched"
+            [attr.aria-describedby]="userForm.controls.username.invalid && userForm.controls.username.touched ? 'username-error' : null"
+          />
         </label>
         @if (userForm.controls.username.invalid && userForm.controls.username.touched) {
-          <small class="field-error" role="alert">Username is required.</small>
+          <small id="username-error" class="field-error" role="alert">Username is required.</small>
         }
 
-        <label>
+        <label for="email">
           Email <span class="required-mark" aria-hidden="true">*</span>
-          <input type="email" formControlName="email" required aria-required="true" />
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            required
+            aria-required="true"
+            [attr.aria-invalid]="userForm.controls.email.invalid && userForm.controls.email.touched"
+            [attr.aria-describedby]="userForm.controls.email.invalid && userForm.controls.email.touched ? 'email-error' : null"
+          />
         </label>
         @if (userForm.controls.email.invalid && userForm.controls.email.touched) {
-          <small class="field-error" role="alert">
+          <small id="email-error" class="field-error" role="alert">
             {{ userForm.controls.email.hasError('email') ? 'Enter a valid email.' : 'Email is required.' }}
           </small>
         }
 
-        <label>
+        <label for="job-role">
           Job role <span class="required-mark" aria-hidden="true">*</span>
-          <select formControlName="jobRole" required aria-required="true">
+          <select id="job-role" formControlName="jobRole" required aria-required="true">
             <option value="tech">Tech</option>
             <option value="qa">QA</option>
             <option value="id">Instructional Designer</option>
@@ -68,7 +85,9 @@
           </select>
         </label>
 
-        <button type="submit">{{ isEditMode ? 'Save changes' : 'Save user' }}</button>
+        <button type="submit" [disabled]="saving()">
+          {{ saving() ? 'Saving...' : (isEditMode ? 'Save changes' : 'Save user') }}
+        </button>
       </form>
     </section>
   </main>
